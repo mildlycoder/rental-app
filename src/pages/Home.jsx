@@ -3,21 +3,24 @@ import data from "../../Data"
 const Home = () => {
     const [propertyList, setPropertyList] = useState(data)
     const [locationFilter, setLocationFilter] = useState('');
+    const [propertyTypeFilter, setPropertyTypeFilter] = useState('');
     const [priceFilter, setPriceFilter] = useState('');
     const [dateFilter, setDateFilter] = useState('');
 
     const filteredProperties = propertyList.filter(property => {
         const locationMatch = locationFilter === '' || property.location.includes(locationFilter);
+        const propertyTypeMatch = propertyTypeFilter.toLowerCase() === '' || property.propertyType.toLowerCase().includes(propertyTypeFilter);
         const priceMatch = priceFilter === '' || property.rent <= parseInt(priceFilter);
         const dateMatch = dateFilter === '' || (property.startDate <= new Date(dateFilter) && property.endDate >= new Date(dateFilter));
 
-        return locationMatch && priceMatch && dateMatch;
+        return locationMatch && propertyTypeMatch && priceMatch && dateMatch;
     });
 
     const resetFilters = () => {
         setDateFilter('')
         setPriceFilter('')
         setLocationFilter('')
+        setPropertyTypeFilter('')
     }
 
     return (
@@ -30,6 +33,13 @@ const Home = () => {
                         placeholder='Location'
                         value={locationFilter}
                         onChange={e => setLocationFilter(e.target.value)}
+                    />
+                    <input
+                        type='text'
+                        className='px-4 py-4 md:border-l-2 text-xl w-full rounded-md'
+                        placeholder='Property type'
+                        value={propertyTypeFilter}
+                        onChange={e => setPropertyTypeFilter(e.target.value)}
                     />
                     <input
                         type='number'

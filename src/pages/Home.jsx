@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import data from "../../Data"
+import PropertyCard from '../components/PropertyCard';
 const Home = () => {
     const [propertyList, setPropertyList] = useState(data)
     const [locationFilter, setLocationFilter] = useState('');
@@ -8,7 +9,7 @@ const Home = () => {
     const [dateFilter, setDateFilter] = useState('');
 
     const filteredProperties = propertyList.filter(property => {
-        const locationMatch = locationFilter === '' || property.location.includes(locationFilter);
+        const locationMatch = locationFilter.toLowerCase() === '' || property.location.toLowerCase().includes(locationFilter);
         const propertyTypeMatch = propertyTypeFilter.toLowerCase() === '' || property.propertyType.toLowerCase().includes(propertyTypeFilter);
         const priceMatch = priceFilter === '' || property.rent <= parseInt(priceFilter);
         const dateMatch = dateFilter === '' || (property.startDate <= new Date(dateFilter) && property.endDate >= new Date(dateFilter));
@@ -66,14 +67,7 @@ const Home = () => {
             <section className='grid md:grid-cols-3 gap-16'>
             {
                 filteredProperties.map(property => (
-                    <div key={property.propertyId} className='rounded-md flex flex-col gap-5 bg-white'>
-                        <div className='flex'><img src={property.img} alt="" className='object-cover aspect-video rounded-t-lg'/></div>
-                        <div className='m-10 flex flex-col gap-1'>
-                            <h1 className='text-xl text-purple-500'>{property.rent}/per month</h1>
-                            <h1 className='text-2xl'>{property.title}</h1>
-                            <h1 className='text-xl text-gray-400'>{property.address}</h1>
-                        </div>
-                    </div>
+                    <PropertyCard property={property}/>
                 ))
             }
             </section>
